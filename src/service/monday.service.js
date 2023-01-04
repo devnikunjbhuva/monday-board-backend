@@ -23,6 +23,7 @@ const getBoardItems = async (boardId) => {
   if (boardWithColumns.errors) {
     throw new Error(boardWithColumns.errors[0].message);
   }
+  console.log('boardWithColumns', boardWithColumns);
 
   // This line will return first board from the list because board api is always returning data in the form of array
   const boardData = boardWithColumns.data.boards.find(() => true);
