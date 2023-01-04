@@ -3,6 +3,7 @@ const {
   COLUMN_LIMIT,
   ITEM_LIMIT,
   EXLUDED_COLUMNS,
+  NO_BOARD_EXIST,
 } = require('../constants/constants');
 const BoardColumnsQuery = require('../graphql/board-columns-schema');
 const boardItemsQuery = require('../graphql/board-items-schema');
@@ -12,10 +13,7 @@ const getBoardItems = async (boardId) => {
   const token = process.env.MONDAY_SIGNING_SECRET;
 
   // Initialize monday client with token
-  const mondayClient = initMondayClient({
-    token:
-      'eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzI5MjU0NzAsImRhdCI6eyJjbGllbnRfaWQiOiIxMDJiOTcyNDUyNzhjNmYxZTIzYjU4MjFiYmU4ZTc4NCIsInVzZXJfaWQiOjM3NzkyNzEwLCJhY2NvdW50X2lkIjoxNDY1OTUzMywic2x1ZyI6InByb2V4ZWxhbmNlcnMiLCJhcHBfaWQiOjEwMDUwNjAzLCJhcHBfdmVyc2lvbl9pZCI6MTAwNzMxODMsImluc3RhbGxfaWQiOjEwMzU4NDU0LCJpc19hZG1pbiI6dHJ1ZSwiaXNfdmlld19vbmx5IjpmYWxzZSwiaXNfZ3Vlc3QiOmZhbHNlLCJ1c2VyX2tpbmQiOiJhZG1pbiJ9fQ.dCnaMYPPszktmjxvUKsylF2ytcH8_HqnwSQjOxUXyKY',
-  });
+  const mondayClient = initMondayClient({ token });
 
   // Fetch board with its columns
   const boardWithColumns = await mondayClient.api(BoardColumnsQuery, {
@@ -26,11 +24,12 @@ const getBoardItems = async (boardId) => {
   if (boardWithColumns.errors) {
     throw new Error(boardWithColumns.errors[0].message);
   }
-  console.log('boardWithColumns', boardWithColumns);
 
   // This line will return first board from the list because board api is always returning data in the form of array
   const boardData = boardWithColumns.data.boards.find(() => true);
-  console.log('boardData', boardData);
+  if (!boardData) {
+    throw new Error(NO_BOARD_EXIST);
+  }
 
   // Filter out the subitems from the columns
   let columns = boardData?.columns?.filter((column) => {
