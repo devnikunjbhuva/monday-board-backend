@@ -12,7 +12,10 @@ const getBoardItems = async (boardId) => {
   const token = process.env.MONDAY_SIGNING_SECRET;
 
   // Initialize monday client with token
-  const mondayClient = initMondayClient({ token });
+  const mondayClient = initMondayClient({
+    token:
+      'eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NzI5MjU0NzAsImRhdCI6eyJjbGllbnRfaWQiOiIxMDJiOTcyNDUyNzhjNmYxZTIzYjU4MjFiYmU4ZTc4NCIsInVzZXJfaWQiOjM3NzkyNzEwLCJhY2NvdW50X2lkIjoxNDY1OTUzMywic2x1ZyI6InByb2V4ZWxhbmNlcnMiLCJhcHBfaWQiOjEwMDUwNjAzLCJhcHBfdmVyc2lvbl9pZCI6MTAwNzMxODMsImluc3RhbGxfaWQiOjEwMzU4NDU0LCJpc19hZG1pbiI6dHJ1ZSwiaXNfdmlld19vbmx5IjpmYWxzZSwiaXNfZ3Vlc3QiOmZhbHNlLCJ1c2VyX2tpbmQiOiJhZG1pbiJ9fQ.dCnaMYPPszktmjxvUKsylF2ytcH8_HqnwSQjOxUXyKY',
+  });
 
   // Fetch board with its columns
   const boardWithColumns = await mondayClient.api(BoardColumnsQuery, {
