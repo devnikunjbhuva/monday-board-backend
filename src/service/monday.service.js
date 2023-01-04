@@ -26,9 +26,10 @@ const getBoardItems = async (boardId) => {
 
   // This line will return first board from the list because board api is always returning data in the form of array
   const boardData = boardWithColumns.data.boards.find(() => true);
+  console.log('boardData', boardData);
 
   // Filter out the subitems from the columns
-  let columns = boardData.columns.filter((column) => {
+  let columns = boardData?.columns?.filter((column) => {
     return !EXLUDED_COLUMNS.includes(column.id);
   });
 
